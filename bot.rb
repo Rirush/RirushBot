@@ -4,6 +4,7 @@ require 'json'
 require 'sucker_punch'
 require 'faraday-cookie_jar'
 require 'faraday_middleware'
+require 'redis'
 
 fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
   faraday.request  :url_encoded
@@ -17,6 +18,8 @@ osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
   faraday.adapter  Faraday.default_adapter
   faraday.use      :cookie_jar
 end
+
+$redis = Redis.new(url: ENV['REDIS_URL'])
 
 fd.post "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot/" }
 
@@ -99,5 +102,21 @@ class BeatmapDownload
         :reply_to_message_id => messageid,
         :document => io
     }
+  end
+end
+
+class UserAdd
+  include SuckerPunch::Job
+
+  def perform(userid)
+    users = $redis.get('users')
+    begin
+      users = JSON.parse users
+    rescue
+      $redis.set('users', [].to_json)
+      users = []
+    end
+    users << userid unless users.include?(userid)
+    $redis.set('users', users.to_json)
   end
 end
