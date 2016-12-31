@@ -49,10 +49,10 @@ class BeatmapDownload
 
   def perform(beatmapid, userid, messageid)
     osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
+      faraday.use      :cookie_jar
       faraday.request  :url_encoded
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter
-      faraday.use      :cookie_jar
     end
     fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
       faraday.request  :url_encoded
