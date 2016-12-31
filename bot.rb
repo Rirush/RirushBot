@@ -30,7 +30,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   begin
     test = @request_payload['message']['text']
   rescue
-    "ok"
+    return "ok"
   end
 
   if (/^\/ping*/ =~ @request_payload['message']['text']) != nil then
