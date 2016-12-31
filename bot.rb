@@ -47,8 +47,13 @@ end
 class BeatmapDownload
   include SuckerPunch::Job
 
-  def perform(data)
-    puts data
+  def perform(beatmapid, userid, messageid)
+    osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
+      faraday.request  :url_encoded
+      faraday.response :logger
+      faraday.adapter  Faraday.default_adapter
+      faraday.use      :cookie_jar
+    end
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
     fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
