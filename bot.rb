@@ -47,7 +47,8 @@ end
 class BeatmapDownload
   include SuckerPunch::Job
 
-  def perform(beatmapid, userid, messageid)
+  def perform(data)
+    puts data
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
     fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
