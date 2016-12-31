@@ -29,18 +29,24 @@ before do
   end
 end
 
+get "/" do
+  "<h1>Heroku app is up!</h1>"
+end
+post "/" do
+  "<h1>Heroku app is up!</h1>"
+end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
   return 'ok' unless @request_payload.has_key?('message')
 
-  if (/\/ping*/ =~ @request_payload['message']['text']) != nil then
+  if (/^\/ping*/i =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['chat']['id'],
         :text => "Pong!",
         :reply_to_message_id => @request_payload['message']['message_id']
     }
   end
-  if (/\/osu http[s]:\/\/osu.ppy.sh\/s\/(?<id>\d+)/ =~ @request_payload['message']['text']) != nil then
+  if (/^\/osu http[s]:\/\/osu.ppy.sh\/s\/(?<id>\d+)/i =~ @request_payload['message']['text']) != nil then
     BeatmapDownload.perform_async /\/osu http[|s]:\/\/osu.ppy.sh\/s\/(?<id>\d+)/.match(@request_payload['message']['text'])[:id], @request_payload['message']['chat']['id'], @request_payload['message']['message_id']
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['chat']['id'],
@@ -51,6 +57,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   "ok"
 end
 
+# загрузка битмап осу
 class BeatmapDownload
   include SuckerPunch::Job
 
