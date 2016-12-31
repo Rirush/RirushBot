@@ -24,8 +24,8 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
         :reply_to_message_id => @request_payload['message']['message_id']
     }
   end
-  if (/\/osu http[s]:\/\/osu.ppy.sh\/s\/(?<id>\d*)/ =~ @request_payload['message']['text']) != nil then
-    BeatmapDownload.perform_async /\/osu http[s]:\/\/osu.ppy.sh\/s\/(?<id>\d*)/.match(@request_payload['message']['text'])[:id]
+  if (/\/osu http[s]:\/\/osu.ppy.sh\/s\/(?<id>\d+)/ =~ @request_payload['message']['text']) != nil then
+    BeatmapDownload.perform_async /\/osu http[|s]:\/\/osu.ppy.sh\/s\/(?<id>\d+)/.match(@request_payload['message']['text'])[:id]
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['from']['id'],
         :text => "Your beatmap going to be downloaded soon",
