@@ -61,6 +61,7 @@ class BeatmapDownload
     end
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
+    puts beatmap.body
     fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
         :chat_id => userid,
         :text => "Your beatmap was succesfully downloaded! BeatmapID = #{beatmapid}",
