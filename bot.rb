@@ -42,7 +42,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
   return 'ok' unless @request_payload.has_key?('message')
   UserAdd.perform_async(@request_payload['message']['from']['id'])
-  if (/^\/ping*/i =~ @request_payload['message']['text']) != nil then
+  if (/^\/ping[|@RirushBot]/i =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['chat']['id'],
         :text => "Pong!",
@@ -56,6 +56,16 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
         :text => "Your beatmap going to be downloaded soon",
         :reply_to_message_id => @request_payload['message']['message_id']
     }
+  end
+  if (/^\/users_dump[|@RirushBot]/i =~ @request_payload['message']['text']) != nil then
+    if @request_payload['message']['from']['id'] == 125836701 then
+      users = $redis.get('users')
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => users,
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    end
   end
   "ok"
 end
@@ -105,6 +115,7 @@ class BeatmapDownload
   end
 end
 
+# добавление юзера в бд
 class UserAdd
   include SuckerPunch::Job
 
