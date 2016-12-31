@@ -3,6 +3,7 @@ require 'faraday'
 require 'json'
 require 'sucker_punch'
 require 'faraday-cookie_jar'
+require 'faraday_middleware'
 
 fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
   faraday.request  :url_encoded
@@ -50,6 +51,7 @@ class BeatmapDownload
   def perform(beatmapid, userid, messageid)
     osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
       faraday.use      :cookie_jar
+      faraday.use      FaradayMiddleware::FollowRedirects
       faraday.request  :url_encoded
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter

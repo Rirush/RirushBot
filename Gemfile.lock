@@ -9,6 +9,8 @@ GEM
     faraday-cookie_jar (0.0.6)
       faraday (>= 0.7.4)
       http-cookie (~> 1.0.0)
+    faraday_middleware (0.10.1)
+      faraday (>= 0.7.4, < 1.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     multipart-post (2.0.0)
@@ -32,6 +34,7 @@ PLATFORMS
 DEPENDENCIES
   faraday
   faraday-cookie_jar
+  faraday_middleware
   sinatra
   sucker_punch (~> 2.0)
 
