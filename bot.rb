@@ -42,7 +42,8 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
   return 'ok' unless @request_payload.has_key?('message')
   UserAdd.perform_async(@request_payload['message']['from']['id'])
-  if (/^\/ping[|@RirushBot]/i =~ @request_payload['message']['text']) != nil then
+  ChatAdd.perform_async(@request_payload['message']['chat']['id'])
+  if (/^\/ping(|@RirushBot)/i =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['chat']['id'],
         :text => "Pong!",
@@ -57,12 +58,22 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
         :reply_to_message_id => @request_payload['message']['message_id']
     }
   end
-  if (/^\/users_dump[|@RirushBot]/i =~ @request_payload['message']['text']) != nil then
+  if (/^\/users_dump(|@RirushBot)/i =~ @request_payload['message']['text']) != nil then
     if @request_payload['message']['from']['id'] == 125836701 then
       users = $redis.get('users')
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
           :text => users,
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    end
+  end
+  if (/^\/chats_dump(|@RirushBot)/i =~ @request_payload['message']['text']) != nil then
+    if @request_payload['message']['from']['id'] == 125836701 then
+      chats = $redis.get('chats')
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => chats,
           :reply_to_message_id => @request_payload['message']['message_id']
       }
     end
@@ -129,5 +140,22 @@ class UserAdd
     end
     users << userid unless users.include?(userid)
     $redis.set('users', users.to_json)
+  end
+end
+
+# добавление чата в бд
+class ChatAdd
+  include SuckerPunch::Job
+
+  def perform(chatid)
+    chats = $redis.get('chats')
+    begin
+      chats = JSON.parse chats
+    rescue
+      $redis.set('chats', [].to_json)
+      chats = []
+    end
+    chats << chatid unless chats.include?(chatid)
+    $redis.set('chats', chats.to_json)
   end
 end
