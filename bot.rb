@@ -49,26 +49,33 @@ end
 
 class BeatmapDownload
   include SuckerPunch::Job
-  osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
-    faraday.use      FaradayMiddleware::FollowRedirects
-    faraday.use      :cookie_jar
-    faraday.request  :url_encoded
-    faraday.response :logger
-    faraday.adapter  Faraday.default_adapter
-  end
-  fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
-    faraday.request  :multipart
-    faraday.response :logger
-    faraday.adapter  Faraday.default_adapter
-  end
 
   def get_beatmap_info(beatmapid)
+    osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
+      faraday.use      FaradayMiddleware::FollowRedirects
+      faraday.use      :cookie_jar
+      faraday.request  :url_encoded
+      faraday.response :logger
+      faraday.adapter  Faraday.default_adapter
+    end
     info = osu.post "/api/get_beatmaps", { k: ENV['OSUTOKEN'], s: beatmapid, limit: 1 }
     name = JSON.parse info.body
     name[0]
   end
 
   def perform(beatmapid, userid, messageid)
+    osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
+      faraday.use      FaradayMiddleware::FollowRedirects
+      faraday.use      :cookie_jar
+      faraday.request  :url_encoded
+      faraday.response :logger
+      faraday.adapter  Faraday.default_adapter
+    end
+    fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
+      faraday.request  :multipart
+      faraday.response :logger
+      faraday.adapter  Faraday.default_adapter
+    end
 
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
