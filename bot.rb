@@ -10,19 +10,11 @@ end
 
 fd.get "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot/" }
 
-get "/" do
-  "Bot is up!"
-end
-post "/" do
-  "Bot is up!"
-end
-
-
 before do
   request.body.rewind
   @request_payload = JSON.parse request.body.read
 end
-post "/hook/#{ENV['SECRETADDR']}/RirushBot}" do
+post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
   "ok"
 end
