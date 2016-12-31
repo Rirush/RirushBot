@@ -21,4 +21,5 @@ before do
 end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot}" do
   puts @request_payload.inspect
+  "ok"
 end
