@@ -49,24 +49,33 @@ end
 
 class BeatmapDownload
   include SuckerPunch::Job
+  osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
+    faraday.use      FaradayMiddleware::FollowRedirects
+    faraday.use      :cookie_jar
+    faraday.request  :url_encoded
+    faraday.response :logger
+    faraday.adapter  Faraday.default_adapter
+  end
+  fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
+    faraday.request  :multipart
+    faraday.response :logger
+    faraday.adapter  Faraday.default_adapter
+  end
+
+  def get_beatmap_info(beatmapid)
+    info = osu.post "/api/get_beatmaps", { k: ENV['OSUTOKEN'], s: beatmapid, limit: 1 }
+    name = JSON.parse info.body
+    name[0]
+  end
 
   def perform(beatmapid, userid, messageid)
-    osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
-      faraday.use      FaradayMiddleware::FollowRedirects
-      faraday.use      :cookie_jar
-      faraday.request  :url_encoded
-      faraday.response :logger
-      faraday.adapter  Faraday.default_adapter
-    end
-    fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
-      faraday.request  :multipart
-      faraday.response :logger
-      faraday.adapter  Faraday.default_adapter
-    end
+
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
-    io = UploadIO.new(StringIO.new(beatmap.body), beatmap.headers[:content_type], "#{beatmapid}.osz")
-    tgres = fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
+    beatmapdata = get_beatmap_info(beatmapid)
+    filename = "#{beatmapdata['creator']} :#{beatmapdata['artist']} - #{beatmapdata['title']}"
+    io = UploadIO.new(StringIO.new(beatmap.body), beatmap.headers[:content_type], "#{filename}.osz")
+    fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
         :chat_id => userid,
         :caption => "Your beatmap was succesfully downloaded! BeatmapID = #{beatmapid}",
         :reply_to_message_id => messageid,
