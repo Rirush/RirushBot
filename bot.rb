@@ -27,11 +27,7 @@ end
 
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
-  begin
-    test = @request_payload['message']['text']
-  rescue
-    return "ok"
-  end
+  return 'ok' unless @request_payload.has_key?('message')
 
   if (/^\/ping*/ =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
