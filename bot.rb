@@ -59,7 +59,7 @@ class BeatmapDownload
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter
     end
-    osu.post "/forum/ucp.php?mode=login", { form: { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' } }
+    osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
     puts beatmap.body
     fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
