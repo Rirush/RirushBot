@@ -20,6 +20,6 @@ before do
   @request_payload = JSON.parse request.body.read
 end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot}" do
-  puts @request_payload.inspect
+  puts @request_payload
   "ok"
 end
