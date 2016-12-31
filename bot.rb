@@ -54,6 +54,11 @@ class BeatmapDownload
       faraday.adapter  Faraday.default_adapter
       faraday.use      :cookie_jar
     end
+    fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
+      faraday.request  :url_encoded
+      faraday.response :logger
+      faraday.adapter  Faraday.default_adapter
+    end
     osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = osu.get "/d/#{beatmapid}n"
     fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
