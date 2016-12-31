@@ -22,7 +22,11 @@ fd.post "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp
 
 before do
   request.body.rewind
-  @request_payload = JSON.parse request.body.read
+  begin
+    @request_payload = JSON.parse request.body.read
+  rescue
+    #
+  end
 end
 
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
