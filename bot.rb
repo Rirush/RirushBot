@@ -8,16 +8,19 @@ fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
   faraday.adapter     Faraday.default_adapter
 end
 
-hook = fd.get "/bot#{ENV['TOKEN']}/getWebhookInfo"
-hookurl = JSON.parse(hook.body)['result']['url']
-if hookurl == "" then
-  fd.get "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot" }
-end
+fd.get "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot/" }
 
 
 before do
   request.body.rewind
   @request_payload = JSON.parse request.body.read
+end
+
+get "/" do
+  "Bot is up!"
+end
+post "/" do
+  "Bot is up!"
 end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot}" do
   puts @request_payload
