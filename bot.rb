@@ -35,7 +35,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
 
   if (/\/ping*/ =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
-        :chat_id => @request_payload['message']['from']['id'],
+        :chat_id => @request_payload['message']['chat']['id'],
         :text => "Pong!",
         :reply_to_message_id => @request_payload['message']['message_id']
     }
