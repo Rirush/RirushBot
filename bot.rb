@@ -57,7 +57,7 @@ class BeatmapDownload
       faraday.adapter  Faraday.default_adapter
     end
     fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
-      faraday.request  :url_encoded
+      faraday.request  :multipart
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter
     end
