@@ -50,8 +50,8 @@ class BeatmapDownload
 
   def perform(beatmapid, userid, messageid)
     osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
-      faraday.use      :cookie_jar
       faraday.use      FaradayMiddleware::FollowRedirects
+      faraday.use      :cookie_jar
       faraday.request  :url_encoded
       faraday.response :logger
       faraday.adapter  Faraday.default_adapter
