@@ -16,7 +16,7 @@ before do
 end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
-  if /^\/ping*/ =~ @request_payload['message']['text'] != nil then
+  if (/^\/ping*/ =~ @request_payload['message']['text']) != nil then
     fd.get "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['from']['id'],
         :text => "Pong!"
