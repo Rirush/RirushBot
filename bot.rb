@@ -41,7 +41,7 @@ end
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
   return 'ok' unless @request_payload.has_key?('message')
-
+  UserAdd.perform_async(@request_payload['message']['from']['id'])
   if (/^\/ping*/i =~ @request_payload['message']['text']) != nil then
     fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => @request_payload['message']['chat']['id'],
