@@ -99,7 +99,8 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       for chat in chats
         fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
             :chat_id => chat,
-            :text => res[:message]
+            :text => res[:message],
+            :parse_mode => "Markdown"
         }
       end
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
