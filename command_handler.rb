@@ -7,6 +7,7 @@ class CommandHandler
 
   def perform(payload)
     command = /^\/(?<command>[\w\d]+)(?:@RirushBot)(?:\s(?<args>.*))?$/i.match(payload[:text])
+    puts command
     args = ''
     begin
       args = command[:args]
