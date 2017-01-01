@@ -95,9 +95,16 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   if (/^\/broadcast(|@RirushBot) (?<message>.+)/i =~ @request_payload['message']['text']) != nil then
     if @request_payload['message']['from']['id'] == 125836701 then
       res = /^\/broadcast(|@RirushBot) (?<message>.+)/i.match(@request_payload['message']['text'])
+      chats = JSON.parse $redis.get('chats')
+      for chat in chats
+        fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+            :chat_id => chat,
+            :text => res[:message]
+        }
+      end
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
-          :text => res[:message],
+          :text => "Broadcast done!",
           :reply_to_message_id => @request_payload['message']['message_id']
       }
     end
