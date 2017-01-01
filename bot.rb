@@ -78,6 +78,20 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       }
     end
   end
+  if (/^\/getChat(|@RirushBot) (?<chatid>(|-)\d+)/i =~ @request_payload['message']['text']) != nil then
+    if @request_payload['message']['from']['id'] == 125836701 then
+      regex = /^\/getChat(|@RirushBot) (?<chatid>(|-)\d+)/i.match(@request_payload['message']['text'])
+      chat = regex[:chatid]
+      res = fd.post "/bot#{ENV['TOKEN']}/getChat", {
+          :chat_id => chat
+      }
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => res.body,
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    end
+  end
   "ok"
 end
 
