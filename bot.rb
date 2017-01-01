@@ -25,6 +25,7 @@ $help = "Nobody gonna help you in this world. But I can give you commandlist.
 
 /osu <beatmap_link> - download Osu! beatmap and send it in chat
 /dice <range> - get random number in given range
+/echo <text> - say text given as a arg
 /help - show this useless message
 
 More features upcoming!
