@@ -8,7 +8,12 @@ class CommandHandler
   def perform(payload)
     command = /^\/(?<command>[\w\d]+)(?:@RirushBot)(?:\s(?<args>.*))?$/i.match(payload['text'])
     args = ''
-    args = command[:args]
+    begin
+      args = command[:args]
+    rescue
+      #
+    end
+
     case command[:command]
       when 'help'
         HelpCommand.perform_async(args, payload)
