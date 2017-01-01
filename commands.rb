@@ -87,7 +87,7 @@ class BroadcastCommand
 
   def perform(args, payload)
     if payload['from']['id'] == 125836701
-      chats = $redis.get('chats')
+      chats = JSON.parse $redis.get('chats')
       for chat in chats
         $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
             :chat_id => chat,
