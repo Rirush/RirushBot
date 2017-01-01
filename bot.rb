@@ -125,7 +125,25 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
         :reply_to_message_id => @request_payload['message']['message_id']
     }
   end
-
+  if (/^\/dice(|@RirushBot) (?<sides>\d+)/i =~ @request_payload['message']['text']) != nil then
+    res = /^\/dice(|@RirushBot) (?<sides>\d+)/i.match(@request_payload['message']['text'])
+    if Integer(res[:sides]) > 0 then
+      randres = rand(Integer(res[:sides]))
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => "_Dice_ says: *#{randres}*",
+          :parse_mode => "Markdown",
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    else
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => "_Dice_ says: *Fuck you*",
+          :parse_mode => "Markdown",
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    end
+  end
   "ok"
 end
 
