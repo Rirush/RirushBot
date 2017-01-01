@@ -145,6 +145,25 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       }
     end
   end
+  if (/^\/echo(|@RirushBot) (?<text>.+)/i =~ @request_payload['message']['text']) != nil then
+    res = /^\/echo(|@RirushBot) (?<text>.+)/i.match(@request_payload['message']['text'])
+    text = res[:text]
+    if @request_payload['message'].has_key?('reply_to_message') then
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => "*Bot* says: _#{text}_",
+          :parse_mode => "Markdown",
+          :reply_to_message_id => @request_payload['message']['reply_to_message']['message_id']
+      }
+    else
+      fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+          :chat_id => @request_payload['message']['chat']['id'],
+          :text => "*Bot* says: _#{text}_",
+          :parse_mode => "Markdown",
+          :reply_to_message_id => @request_payload['message']['message_id']
+      }
+    end
+  end
   "ok"
 end
 
