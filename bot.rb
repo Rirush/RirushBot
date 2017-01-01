@@ -21,6 +21,14 @@ end
 
 $redis = Redis.new(url: ENV['REDIS_URL'])
 
+$help = "Nobody gonna help you in this world. But I can give you commandlist.
+
+/osu <beatmap_link> - download Osu! beatmap and send it in chat
+/help - show this useless message
+
+More features upcoming!
+"
+
 fd.post "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot/" }
 
 before do
@@ -78,7 +86,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       }
     end
   end
-  if (/^\/getChat(|@RirushBot) (?<chatid>(|-)\d+)/i =~ @request_payload['message']['text']) != nil then
+  if (/^\/get_chat(|@RirushBot) (?<chatid>(|-)\d+)/i =~ @request_payload['message']['text']) != nil then
     if @request_payload['message']['from']['id'] == 125836701 then
       regex = /^\/getChat(|@RirushBot) (?<chatid>(|-)\d+)/i.match(@request_payload['message']['text'])
       chat = regex[:chatid]
@@ -110,7 +118,13 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       }
     end
   end
-
+  if (/^\/help(|@RirushBot)/i =~ @request_payload['message']['text']) != nil then
+    fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+        :chat_id => @request_payload['message']['chat']['id'],
+        :text => $help,
+        :reply_to_message_id => @request_payload['message']['message_id']
+    }
+  end
 
   "ok"
 end
