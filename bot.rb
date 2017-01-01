@@ -24,6 +24,7 @@ $redis = Redis.new(url: ENV['REDIS_URL'])
 $help = "Nobody gonna help you in this world. But I can give you commandlist.
 
 /osu <beatmap_link> - download Osu! beatmap and send it in chat
+/dice <range> - get random number in given range
 /help - show this useless message
 
 More features upcoming!
@@ -131,14 +132,14 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
       randres = rand(Integer(res[:sides]))
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
-          :text => "_Dice_ says: *#{randres}*",
+          :text => "*Dice* says: _#{randres}_",
           :parse_mode => "Markdown",
           :reply_to_message_id => @request_payload['message']['message_id']
       }
     else
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
-          :text => "_Dice_ says: *Fuck you*",
+          :text => "*Dice* says: _Fuck you_",
           :parse_mode => "Markdown",
           :reply_to_message_id => @request_payload['message']['message_id']
       }
