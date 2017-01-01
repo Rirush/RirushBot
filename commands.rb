@@ -107,7 +107,7 @@ class DiceCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    range = Integer(/(?:|-)\d+/i.match(args))
+    range = Integer(/(?<range>(|-)\d+)/i.match(args)['range'])
     if range > 1
       result = rand(range + 1)
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
