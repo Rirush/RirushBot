@@ -40,7 +40,7 @@ class UsersDumpCommand
 
   def perform(args, payload)
     if payload['from']['id'] == 125836701
-      users = JSON.parse $redis.get('users')
+      users = $redis.get('users')
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => users,
@@ -55,7 +55,7 @@ class ChatsDumpCommand
 
   def perform(args, payload)
     if payload['from']['id'] == 125836701
-      chats = JSON.parse $redis.get('chats')
+      chats = $redis.get('chats')
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => chats,
@@ -107,7 +107,7 @@ class DiceCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    range = Integer(/(?<range>(|-)\d+)/i.match(args)['range'])
+    range = Integer(/(?<range>(|-)\d+)$/i.match(args)['range'])
     if range > 1
       result = rand(range + 1)
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
