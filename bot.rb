@@ -99,7 +99,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
           :chat_id => @request_payload['message']['chat']['id'],
           :text => res.body,
           :reply_to_message_id => @request_payload['message']['message_id']
-      } if chat < 0
+      } if Integer(chat) < 0
     end
   end
   if (/^\/broadcast(|@RirushBot) (?<message>.+)/i =~ @request_payload['message']['text']) != nil then
