@@ -70,7 +70,7 @@ class GetChatCommand
 
   def perform(args, payload)
     if payload['from']['id'] == 125836701
-      chat = $fd.post '/getChat', {
+      chat = $fd.post "/bot#{ENV['TOKEN']}/getChat", {
           :chat_id => args
       } if /-\d+/i.match(args)
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
