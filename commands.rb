@@ -92,7 +92,8 @@ class BroadcastCommand
         $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
             :chat_id => chat,
             :text => args,
-            :parse_mode => 'Markdown'
+            :parse_mode => 'Markdown',
+            :disable_notification => true
         } if args != ''
       end
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
