@@ -7,7 +7,7 @@ class HelpCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    $fd.post "/sendMessage", {
+    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => $help,
         :reply_to_message_id => payload['message_id']
@@ -19,7 +19,7 @@ class PingCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    $fd.post "/sendMessage", {
+    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => 'Got ping. PONG!',
         :reply_to_message_id => payload['message_id']
@@ -41,7 +41,7 @@ class UsersDumpCommand
   def perform(args, payload)
     if payload['from']['id'] == 125836701
       users = JSON.parse $redis.get('users')
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => users,
           :reply_to_message_id => payload['message_id']
@@ -56,7 +56,7 @@ class ChatsDumpCommand
   def perform(args, payload)
     if payload['from']['id'] == 125836701
       chats = JSON.parse $redis.get('chats')
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => chats,
           :reply_to_message_id => payload['message_id']
@@ -73,7 +73,7 @@ class GetChatCommand
       chat = $fd.post '/getChat', {
           :chat_id => args
       } if /-\d+/i.match(args)
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => chat.body,
           :reply_to_message_id => payload['message_id']
@@ -89,12 +89,12 @@ class BroadcastCommand
     if payload['from']['id'] == 125836701
       chats = $redis.get('chats')
       for chat in chats
-        $fd.post '/sendMessage', {
+        $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
             :chat_id => chat,
             :text => args
         } if args != ''
       end
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => 'Broadcasted!',
           :reply_to_message_id => payload['message_id']
@@ -110,14 +110,14 @@ class DiceCommand
     range = Integer(/(?:|-)\d+/i.match(args))
     if range > 1
       result = rand(range + 1)
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => "*Dice* says: _#{result}_",
           :parse_mode => 'Markdown',
           :reply_to_message_id => payload['message_id']
       }
     else
-      $fd.post '/sendMessage', {
+      $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
           :text => '*Dice* says: _fuck you_',
           :parse_mode => 'Markdown',
@@ -131,7 +131,7 @@ class EchoCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    $fd.post '/sendMessage', {
+    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => "*Bot* says: _#{args}_",
         :parse_mode => 'Markdown',

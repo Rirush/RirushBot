@@ -1,7 +1,7 @@
 require 'faraday'
 require 'redis'
 
-$fd = Faraday.new(:url => "https://api.telegram.org/bot#{ENV['TOKEN']}") do |faraday|
+$fd = Faraday.new(:url => "https://api.telegram.org") do |faraday|
   faraday.request  :multipart
   faraday.request  :url_encoded
   faraday.response :logger
