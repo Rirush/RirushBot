@@ -91,7 +91,8 @@ class BroadcastCommand
       for chat in chats
         $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
             :chat_id => chat,
-            :text => args
+            :text => args,
+            :parse_mode => 'Markdown'
         } if args != ''
       end
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
