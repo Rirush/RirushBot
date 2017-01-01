@@ -31,7 +31,7 @@ class OsuCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
-    BeatmapDownload(/http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)[:id], payload['chat']['id'], payload['message_id']) if /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)
+    BeatmapDownload.perform_async(/http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)['id'], payload['chat']['id'], payload['message_id']) if /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)
   end
 end
 
