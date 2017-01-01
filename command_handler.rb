@@ -6,7 +6,8 @@ class CommandHandler
   include SuckerPunch::Job
 
   def perform(payload)
-    command = /^\/(?<command>[\w\d]+)(?:@RirushBot)(?:\s(?<args>.*))?$/i.match(:text)
+    puts payload[:text]
+    command = /^\/(?<command>[\w\d]+)(?:@RirushBot)(?:\s(?<args>.*))?$/i.match(payload[:text])
     puts command
     args = ''
     begin
