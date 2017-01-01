@@ -99,7 +99,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
           :chat_id => @request_payload['message']['chat']['id'],
           :text => res.body,
           :reply_to_message_id => @request_payload['message']['message_id']
-      }
+      } if chat < 0
     end
   end
   if (/^\/broadcast(|@RirushBot) (?<message>.+)/i =~ @request_payload['message']['text']) != nil then
@@ -129,7 +129,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   end
   if (/^\/dice(|@RirushBot) (?<sides>(|-)\d+)$/i =~ @request_payload['message']['text']) != nil then
     res = /^\/dice(|@RirushBot) (?<sides>(|-)\d+)$/i.match(@request_payload['message']['text'])
-    if Integer(res[:sides]) > 0 then
+    if Integer(res[:sides]) > 1 then
       randres = rand(Integer(res[:sides]))
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
