@@ -94,10 +94,10 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   end
   if (/^\/broadcast(|@RirushBot) (?<message> *)/i =~ @request_payload['message']['text']) != nil then
     if @request_payload['message']['from']['id'] == 125836701 then
-      /^\/broadcast(|@RirushBot) (?<message> *)/i =~ @request_payload['message']['text']
+      res = /^\/broadcast(|@RirushBot) (?<message> *)/i =~ @request_payload['message']['text']
       fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => @request_payload['message']['chat']['id'],
-          :text => message,
+          :text => res[:message],
           :reply_to_message_id => @request_payload['message']['message_id']
       }
     end
