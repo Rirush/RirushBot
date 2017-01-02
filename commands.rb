@@ -131,7 +131,7 @@ class DiceCommand
         :text => '*Dice* says: _NOPE_',
         :parse_mode => 'Markdown',
         :reply_to_message_id => payload['message_id']
-    } if (/(?<range>(|-)\d+)$/i =~ match(args)) == nil
+    } unless (/(?<range>(|-)\d+)$/i =~ match(args)) != nil
   end
 end
 
