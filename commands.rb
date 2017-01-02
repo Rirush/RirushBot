@@ -109,6 +109,12 @@ class DiceCommand
   include SuckerPunch::Job
 
   def perform(args, payload)
+    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+        :chat_id => payload['chat']['id'],
+        :text => '*Dice* says: _NOPE_',
+        :parse_mode => 'Markdown',
+        :reply_to_message_id => payload['message_id']
+    } unless (/(?<range>(|-)\d+)$/i =~ match(args)) != nil
     range = Integer(/(?<range>(|-)\d+)$/i.match(args)['range'])
     if range > 1
       result = rand(range + 1)
@@ -126,12 +132,6 @@ class DiceCommand
           :reply_to_message_id => payload['message_id']
       }
     end
-    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
-        :chat_id => payload['chat']['id'],
-        :text => '*Dice* says: _NOPE_',
-        :parse_mode => 'Markdown',
-        :reply_to_message_id => payload['message_id']
-    } unless (/(?<range>(|-)\d+)$/i =~ match(args)) != nil
   end
 end
 
