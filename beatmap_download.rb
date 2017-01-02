@@ -15,7 +15,7 @@ class BeatmapDownload
     $osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = $osu.get "/d/#{beatmapid}n"
     beatmapdata = get_beatmap_info(beatmapid)
-    filename = "#{beatmapdata['artist']} - #{beatmapdata['title']}"
+    filename = "#{beatmapid} #{beatmapdata['artist']} - #{beatmapdata['title']}"
     filename.gsub! '~', '-'
     filename.gsub! '/', '-'
     filename.gsub! '*', '-'
