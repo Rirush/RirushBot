@@ -7,15 +7,14 @@ class CommandHandler
 
   def perform(payload)
     command = /^\/(?<command>[\w\d]+)(?:|@RirushBot)(?:\s(?<args>.+))?$/ismu.match(payload['text'])
-    puts command
+    return '' unless command
     args = ''
     begin
       args = command['args']
     rescue
       #
     end
-
-    case command['command']
+    case command['command'].downcase 
       when 'help'
         HelpCommand.perform_async(args, payload)
       when 'ping'
