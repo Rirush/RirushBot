@@ -126,6 +126,12 @@ class DiceCommand
           :reply_to_message_id => payload['message_id']
       }
     end
+    $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
+        :chat_id => payload['chat']['id'],
+        :text => '*Dice* says: _NOPE_',
+        :parse_mode => 'Markdown',
+        :reply_to_message_id => payload['message_id']
+    } if (/(?<range>(|-)\d+)$/i =~ match(args)) == nil
   end
 end
 

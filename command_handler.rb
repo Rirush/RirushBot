@@ -14,7 +14,7 @@ class CommandHandler
     rescue
       #
     end
-    case command['command'].downcase 
+    case command['command'].downcase
       when 'help'
         HelpCommand.perform_async(args, payload)
       when 'ping'
