@@ -114,7 +114,7 @@ class DiceCommand
         :text => '*Dice* says: _NOPE_',
         :parse_mode => 'Markdown',
         :reply_to_message_id => payload['message_id']
-    } unless (/(?<range>(|-)\d+)$/i =~ match(args)) != nil
+    } unless (/(?<range>(|-)\d+)$/i =~ args) != nil
     range = Integer(/(?<range>(|-)\d+)$/i.match(args)['range'])
     if range > 1
       result = rand(range + 1)
