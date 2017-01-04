@@ -46,10 +46,11 @@ class BeatmapDownload
               'document_url': #{url}
           }
       ]"
-      $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+      res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
           :inline_query_id => userid,
           :results => answer
       }
+      puts res.body
     end
   end
 end
