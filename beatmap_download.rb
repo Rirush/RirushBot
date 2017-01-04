@@ -41,7 +41,7 @@ class BeatmapDownload
       answer = [
           {
               :type => 'document',
-              :id => beatmapid,
+              :id => beatmapid.to_s,
               :title => filename,
               :mime_type => 'application/zip',
               :document_url => url
