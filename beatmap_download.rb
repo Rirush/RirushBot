@@ -1,5 +1,6 @@
 require 'sucker_punch'
 require './define'
+require 'json'
 
 class BeatmapDownload
   include SuckerPunch::Job
@@ -37,18 +38,18 @@ class BeatmapDownload
       puts res.body
       url = res.body['url']
       url.gsub! '\\', ''
-      answer = "[
+      answer = [
           {
-              'type': 'document',
-              'id': #{beatmapid},
-              'title': => #{filename},
-              'mime_type': 'application/zip',
-              'document_url': #{url}
+              :type => 'document',
+              :id => beatmapid,
+              :title => filename,
+              :mime_type => 'application/zip',
+              :document_url => url
           }
-      ]"
+      ]
       res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
           :inline_query_id => userid,
-          :results => answer
+          :results => answer.to_json.to_str
       }
       puts res.body
     end
