@@ -43,7 +43,7 @@ class BeatmapDownload
           :document => io
       }
       puts res.body
-      fid = res.body['result']['document']['file_id']
+      fid = JSON.parse(res.body)['result']['document']['file_id']
       answer = [
           {
               :type => 'document',
