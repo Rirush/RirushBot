@@ -35,15 +35,21 @@ class BeatmapDownload
           :files => [io]
       }
       puts res.body
-      puts "PWRTelegram says: #{res.body}"
-      answer = [
+      url = res.body['url']
+      url.gsub! '\\', ''
+      answer = "[
           {
-              :type => 'document',
-              :id => beatmapid,
-              :title => filename,
-              :mime_type => 'application/zip'
+              'type': 'document',
+              'id': #{beatmapid},
+              'title': => #{filename},
+              'mime_type': 'application/zip',
+              'document_url': #{url}
           }
-      ]
+      ]"
+      $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+          :inline_query_id => userid,
+          :results => answer
+      }
     end
   end
 end

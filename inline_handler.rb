@@ -7,6 +7,6 @@ class InlineHandler
 
   def perform(querydata, querytext)
     osu = /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(querytext)
-    BeatmapDownload.perform_async(osu['id'], querydata['from']['id'], -1, true) if osu != nil
+    BeatmapDownload.perform_async(osu['id'], querydata['id'], -1, true) if osu != nil
   end
 end
