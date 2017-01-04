@@ -9,6 +9,7 @@ require './command_handler'
 require './beatmap_download'
 require './define'
 require './inline_handler'
+require './event_logger'
 
 $fd.post "/bot#{ENV['TOKEN']}/setWebhook", { :url => "https://rirushbot.herokuapp.com/hook/#{ENV['SECRETADDR']}/RirushBot/" }
 
@@ -22,11 +23,13 @@ before do
 end
 
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
-  puts @request_payload
+  #puts @request_payload
+  EventLogger.perform_async(@request_payload)
   UserAdd.perform_async(@request_payload['message']['from']['id']) if @request_payload.has_key?('message')
   ChatAdd.perform_async(@request_payload['message']['chat']['id']) if @request_payload.has_key?('message')
   CommandHandler.perform_async(@request_payload['message']) if @request_payload.has_key?('message')
   InlineHandler.perform_async(@request_payload['inline_query'], @request_payload['inline_query']['query']) if @request_payload.has_key?('inline_query')
+  UserAdd.perform_async(@request_payload['inline_query']['from']['id']) if @request_payload.has_key?('inline_query')
   'ok'
 end
 
