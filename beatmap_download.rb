@@ -32,8 +32,9 @@ class BeatmapDownload
 
     if mode
       res = $upload.post '/upload.php', {
-          :files => io
+          :files => [io]
       }
+      puts res.body
       puts "PWRTelegram says: #{res.body}"
       answer = [
           {
