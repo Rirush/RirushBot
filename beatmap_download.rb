@@ -34,7 +34,7 @@ class BeatmapDownload
       res = $pwrt.post "/bot#{ENV['TOKEN']}/uploadDocument", {
           :document => io
       }
-      puts res.body
+      puts "PWRTelegram says: #{res.body}"
       answer = [
           {
               :type => 'document',
