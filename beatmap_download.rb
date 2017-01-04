@@ -43,18 +43,19 @@ class BeatmapDownload
           :document => io
       }
       puts res.body
+      fid = res.body['result']['document']['file_id']
       answer = [
           {
               :type => 'document',
               :id => beatmapid,
               :title => filename,
-              :document_file_id => ''
+              :document_file_id => fid
           }
       ]
-      #res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
-      #    :inline_query_id => userid,
-      #    :results => answer.to_json
-      #}
+      res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+          :inline_query_id => userid,
+          :results => answer.to_json
+      }
       puts res.body
     end
   end
