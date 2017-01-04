@@ -37,11 +37,10 @@ class BeatmapDownload
       }
       puts res.body
       url = res.body['url']
-      url.gsub! '\\', ''
       answer = [
           {
               :type => 'document',
-              :id => beatmapid.to_s,
+              :id => rand(1000000000000).to_s,
               :title => filename,
               :mime_type => 'application/zip',
               :document_url => url
