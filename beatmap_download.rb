@@ -22,6 +22,7 @@ class BeatmapDownload
     filename.gsub! '"', ''
     filename.gsub! "'", ''
     filename.gsub! '?', '-'
+    filename.gsub! ':', '-'
     io = UploadIO.new(StringIO.new(beatmap.body), beatmap.headers[:content_type], "#{filename}.osz")
     $fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
         :chat_id => userid,
