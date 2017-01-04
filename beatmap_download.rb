@@ -31,8 +31,8 @@ class BeatmapDownload
     } unless mode
 
     if mode
-      res = $pwrt.post "/bot#{ENV['TOKEN']}/uploadFile", {
-          :file => io
+      res = $upload.post '/upload.php', {
+          :files => io
       }
       puts "PWRTelegram says: #{res.body}"
       answer = [

@@ -16,7 +16,7 @@ $osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
   faraday.adapter  Faraday.default_adapter
 end
 
-$pwrt = Faraday.new(:url => "https://api.pwrtelegram.xyz") do |faraday|
+$upload = Faraday.new(:url => "https://desu.sh") do |faraday|
   faraday.request  :multipart
   faraday.request  :url_encoded
   faraday.response :logger
