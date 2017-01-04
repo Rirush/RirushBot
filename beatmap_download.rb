@@ -32,24 +32,29 @@ class BeatmapDownload
     } unless mode
 
     if mode
-      res = $upload.post '/upload.php', {
-          :files => [io]
+      #res = $upload.post '/upload.php', {
+      #    :files => [io]
+      #}
+      #puts res.body
+      #url = res.body['url']
+      chanid = -1001083216506
+      res = $fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
+          :chat_id => chanid,
+          :document => io
       }
       puts res.body
-      url = res.body['url']
       answer = [
           {
               :type => 'document',
-              :id => rand(1000000000000).to_s,
+              :id => beatmapid,
               :title => filename,
-              :mime_type => 'application/zip',
-              :document_url => url
+              :document_file_id => ''
           }
       ]
-      res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
-          :inline_query_id => userid,
-          :results => answer.to_json.to_str
-      }
+      #res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+      #    :inline_query_id => userid,
+      #    :results => answer.to_json
+      #}
       puts res.body
     end
   end
