@@ -22,11 +22,10 @@ end
 
 post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   puts @request_payload
-  return 'ok' unless @request_payload.has_key?('message')
   UserAdd.perform_async(@request_payload['message']['from']['id'])
   ChatAdd.perform_async(@request_payload['message']['chat']['id'])
-  CommandHandler.perform_async(@request_payload['message'])
-  "ok"
+  CommandHandler.perform_async(@request_payload['message']) if @request_payload.has_key?('message')
+  'ok'
 end
 
 # добавление юзера в бд
