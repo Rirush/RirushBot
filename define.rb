@@ -16,7 +16,7 @@ $osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
   faraday.adapter  Faraday.default_adapter
 end
 
-$upload = Faraday.new(:url => "https://desu.sh") do |faraday|
+$upload = Faraday.new(:url => "https://mixtape.moe") do |faraday|
   faraday.request  :multipart
   faraday.request  :url_encoded
   faraday.response :logger
