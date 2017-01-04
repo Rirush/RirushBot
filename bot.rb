@@ -26,7 +26,7 @@ post "/hook/#{ENV['SECRETADDR']}/RirushBot/" do
   UserAdd.perform_async(@request_payload['message']['from']['id']) if @request_payload.has_key?('message')
   ChatAdd.perform_async(@request_payload['message']['chat']['id']) if @request_payload.has_key?('message')
   CommandHandler.perform_async(@request_payload['message']) if @request_payload.has_key?('message')
-  InlineHandler.perform_async(@request_payload['inline_query'], @request_payload['query']) if @request_payload.has_key?('inline_query')
+  InlineHandler.perform_async(@request_payload['inline_query'], @request_payload['inline_query']['query']) if @request_payload.has_key?('inline_query')
   'ok'
 end
 
