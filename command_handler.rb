@@ -7,7 +7,7 @@ class CommandHandler
 
   def perform(payload)
     command = /^\/(?<command>[\w\d]+)(?:|@RirushBot)(?:\s(?<args>.+))?$/ismu.match(payload['text'])
-    return '' unless command
+    return '' if command == nil
     args = ''
     begin
       args = command['args']
