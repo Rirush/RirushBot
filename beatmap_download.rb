@@ -10,8 +10,7 @@ class BeatmapDownload
     name[0]
   end
 
-  def perform(beatmapid, userid, messageid)
-
+  def perform(beatmapid, userid, messageid, mode = false)
     $osu.post "/forum/ucp.php?mode=login", { username: ENV['OSULOGIN'], password: ENV['OSUPASS'], autologin: 'on', sid: '', login: 'login' }
     beatmap = $osu.get "/d/#{beatmapid}n"
     beatmapdata = get_beatmap_info(beatmapid)
@@ -29,6 +28,21 @@ class BeatmapDownload
         :caption => "Your beatmap was succesfully downloaded! BeatmapID = #{beatmapid}",
         :reply_to_message_id => messageid,
         :document => io
-    }
+    } unless mode
+
+    if mode
+      res = $pwrt.post "/bot#{ENV['TOKEN']}/uploadDocument", {
+          :document => io
+      }
+      puts res.body
+      answer = [
+          {
+              :type => 'document',
+              :id => beatmapid,
+              :title => filename,
+              :mime_type => 'application/zip'
+          }
+      ]
+    end
   end
 end

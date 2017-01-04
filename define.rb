@@ -16,6 +16,13 @@ $osu = Faraday.new(:url => "https://osu.ppy.sh") do |faraday|
   faraday.adapter  Faraday.default_adapter
 end
 
+$pwrt = Faraday.new(:url => "https://api.pwrtelegram.xyz") do |faraday|
+  faraday.request  :multipart
+  faraday.request  :url_encoded
+  faraday.response :logger
+  faraday.adapter  Faraday.default_adapter
+end
+
 $redis = Redis.new(url: ENV['REDIS_URL'])
 
 $help = "Nobody gonna help you in this world. But I can give you commandlist.
