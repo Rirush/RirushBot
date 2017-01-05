@@ -216,9 +216,6 @@ class DiceCommand
     end
     end
   end
-  if mode
-
-  end
 
 end
 
