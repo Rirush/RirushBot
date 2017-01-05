@@ -32,4 +32,6 @@ $help = "Nobody gonna help you in this world. But I can give you commandlist.
 /echo <text> - say text given as a arg
 /help - show this useless message
 
+Bot supports inline mode, to use it pass command without /
+
 More features upcoming!"
