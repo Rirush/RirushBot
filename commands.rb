@@ -16,6 +16,7 @@ class HelpCommand
       result = [
           {
             :type => 'message',
+            :id => rand(10000000),
             :message_text => $help,
             :parse_mode => 'Markdown'
           }
