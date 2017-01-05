@@ -18,8 +18,6 @@ class InlineHandler
         HelpCommand.perform_async(args, payload, true)
       when 'ping'
         PingCommand.perform_async(args, payload, true)
-      when 'osu'
-        OsuCommand.perform_async(args, payload, true)
       when 'users_dump'
         UsersDumpCommand.perform_async(args, payload, true)
       when 'chats_dump'
