@@ -15,6 +15,7 @@ class HelpCommand
     if mode
       result = [
           {
+            :type => 'message',
             :message_text => $help,
             :parse_mode => 'Markdown'
           }
