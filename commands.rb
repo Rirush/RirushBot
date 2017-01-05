@@ -6,7 +6,7 @@ require 'json'
 class HelpCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => $help,
@@ -18,7 +18,7 @@ end
 class PingCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => 'Got ping. PONG!',
@@ -30,7 +30,7 @@ end
 class OsuCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     BeatmapDownload.perform_async(/http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)['id'], payload['chat']['id'], payload['message_id']) if /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(args)
   end
 end
@@ -38,7 +38,7 @@ end
 class UsersDumpCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     if payload['from']['id'] == 125836701
       users = $redis.get('users')
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
@@ -53,7 +53,7 @@ end
 class ChatsDumpCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     if payload['from']['id'] == 125836701
       chats = $redis.get('chats')
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
@@ -68,7 +68,7 @@ end
 class GetChatCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     if payload['from']['id'] == 125836701
       chat = $fd.post "/bot#{ENV['TOKEN']}/getChat", {
           :chat_id => args
@@ -85,7 +85,7 @@ end
 class BroadcastCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     if payload['from']['id'] == 125836701
       chats = JSON.parse $redis.get('chats')
       for chat in chats
@@ -108,7 +108,7 @@ end
 class DiceCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => '*Dice* says: _NOPE_',
@@ -138,7 +138,7 @@ end
 class EchoCommand
   include SuckerPunch::Job
 
-  def perform(args, payload)
+  def perform(args, payload, mode = false)
     $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => "*Bot* says: _#{args}_",
