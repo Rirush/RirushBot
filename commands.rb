@@ -21,7 +21,8 @@ class HelpCommand
       ]
       $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
           :inline_query_id => payload['id'],
-          :results => result
+          :results => result.to_json,
+          :switch_pm_text => 'Go to PM'
       }
     end
   end
