@@ -15,10 +15,10 @@ class HelpCommand
     if mode
       result = [
           {
-            :type => 'message',
+            :type => 'article',
             :id => rand(10000000).to_s,
-            :message_text => $help,
-            :parse_mode => 'Markdown'
+            :title => '#HELPME',
+            :description => $help
           }
       ]
       res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
