@@ -11,7 +11,19 @@ class HelpCommand
         :chat_id => payload['chat']['id'],
         :text => $help,
         :reply_to_message_id => payload['message_id']
-    }
+    } unless mode
+    if mode
+      result = [
+          {
+            :message_text => $help,
+            :parse_mode => 'Markdown'
+          }
+      ]
+      $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+          :inline_query_id => payload['id'],
+          :results => result
+      }
+    end
   end
 end
 
@@ -23,7 +35,7 @@ class PingCommand
         :chat_id => payload['chat']['id'],
         :text => 'Got ping. PONG!',
         :reply_to_message_id => payload['message_id']
-    }
+    } unless mode
   end
 end
 
