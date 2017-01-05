@@ -9,28 +9,28 @@ class InlineHandler
   def perform(querydata, querytext)
     osu = /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(querytext)
     BeatmapDownload.perform_async(osu['id'], querydata['id'], -1, true) if osu != nil
-    inline_regex = /(?<cmd>[a-zA-Z_]+) (?<args>.*)/iu
+    inline_regex = /^(?<cmd>[a-zA-Z_]+)(?<args>.*)/iu
     info = inline_regex.match(querytext)
     payload = querydata
-    args = info['args']
+    args = info['args'].sub! ' ', ''
     case info['cmd']
-      when 'help '
+      when 'help'
         HelpCommand.perform_async(args, payload, true)
-      when 'ping '
+      when 'ping'
         PingCommand.perform_async(args, payload, true)
-      when 'osu '
+      when 'osu'
         OsuCommand.perform_async(args, payload, true)
-      when 'users_dump '
+      when 'users_dump'
         UsersDumpCommand.perform_async(args, payload, true)
-      when 'chats_dump '
+      when 'chats_dump'
         ChatsDumpCommand.perform_async(args, payload, true)
-      when 'get_chat '
+      when 'get_chat'
         GetChatCommand.perform_async(args, payload, true)
-      when 'broadcast '
+      when 'broadcast'
         BroadcastCommand.perform_async(args, payload, true)
-      when 'dice '
+      when 'dice'
         DiceCommand.perform_async(args, payload, true)
-      when 'echo '
+      when 'echo'
         EchoCommand.perform_async(args, payload, true)
     end
   end
