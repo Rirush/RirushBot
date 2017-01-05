@@ -228,7 +228,7 @@ class EchoCommand
         :text => "*Bot* says: _#{args}_",
         :parse_mode => 'Markdown',
         :reply_to_message_id => payload['message_id']
-    } if args != '' & !mode
+    } if (args != '') & (!mode)
     if mode
       if mode
         result = [
