@@ -18,7 +18,7 @@ class HelpCommand
             :type => 'article',
             :id => rand(10000000).to_s,
             :title => '#HELPME',
-            :description => $help
+            :message_text => $help
           }
       ]
       res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
