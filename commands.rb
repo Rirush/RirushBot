@@ -19,11 +19,12 @@ class HelpCommand
             :parse_mode => 'Markdown'
           }
       ]
-      $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+      res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
           :inline_query_id => payload['id'],
           :results => result.to_json,
           :switch_pm_text => 'Go to PM'
       }
+      puts res.body
     end
   end
 end
