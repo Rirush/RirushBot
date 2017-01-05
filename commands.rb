@@ -40,6 +40,22 @@ class PingCommand
         :text => 'Got ping. PONG!',
         :reply_to_message_id => payload['message_id']
     } unless mode
+    if mode
+      result = [
+          {
+              :type => 'article',
+              :id => rand(10000000).to_s,
+              :title => '#PINGME',
+              :message_text => 'Pinged using inline mode. PONG!'
+          }
+      ]
+      res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+          :inline_query_id => payload['id'],
+          :results => result.to_json,
+          :switch_pm_text => 'Go to PM'
+      }
+      puts res.body
+    end
   end
 end
 
@@ -61,7 +77,23 @@ class UsersDumpCommand
           :chat_id => payload['chat']['id'],
           :text => users,
           :reply_to_message_id => payload['message_id']
-      }
+      } unless mode
+      if mode
+        result = [
+            {
+                :type => 'article',
+                :id => rand(10000000).to_s,
+                :title => '#DUMPME',
+                :message_text => users
+            }
+        ]
+        res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+            :inline_query_id => payload['id'],
+            :results => result.to_json,
+            :switch_pm_text => 'Go to PM'
+        }
+        puts res.body
+      end
     end
   end
 end
@@ -76,7 +108,23 @@ class ChatsDumpCommand
           :chat_id => payload['chat']['id'],
           :text => chats,
           :reply_to_message_id => payload['message_id']
-      }
+      } unless mode
+      if mode
+        result = [
+            {
+                :type => 'article',
+                :id => rand(10000000).to_s,
+                :title => '#DUMPME',
+                :message_text => chats
+            }
+        ]
+        res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+            :inline_query_id => payload['id'],
+            :results => result.to_json,
+            :switch_pm_text => 'Go to PM'
+        }
+        puts res.body
+      end
     end
   end
 end
@@ -86,14 +134,31 @@ class GetChatCommand
 
   def perform(args, payload, mode = false)
     if payload['from']['id'] == 125836701
-      chat = $fd.post "/bot#{ENV['TOKEN']}/getChat", {
+      @chat = 'Error'
+      @chat = $fd.post "/bot#{ENV['TOKEN']}/getChat", {
           :chat_id => args
-      } if /-\d+/i.match(args)
+      } if /\d+/i.match(args)
       $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
           :chat_id => payload['chat']['id'],
-          :text => chat.body,
+          :text => @chat.body,
           :reply_to_message_id => payload['message_id']
-      }
+      } unless mode
+      if mode
+        result = [
+            {
+                :type => 'article',
+                :id => rand(10000000).to_s,
+                :title => '#GETME',
+                :message_text => @chat.body
+            }
+        ]
+        res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+            :inline_query_id => payload['id'],
+            :results => result.to_json,
+            :switch_pm_text => 'Go to PM'
+        }
+        puts res.body
+      end
     end
   end
 end
@@ -125,6 +190,7 @@ class DiceCommand
   include SuckerPunch::Job
 
   def perform(args, payload, mode = false)
+    unless mode
     $fd.post "/bot#{ENV['TOKEN']}/sendMessage", {
         :chat_id => payload['chat']['id'],
         :text => '*Dice* says: _NOPE_',
@@ -148,7 +214,12 @@ class DiceCommand
           :reply_to_message_id => payload['message_id']
       }
     end
+    end
   end
+  if mode
+
+  end
+
 end
 
 class EchoCommand
@@ -160,6 +231,25 @@ class EchoCommand
         :text => "*Bot* says: _#{args}_",
         :parse_mode => 'Markdown',
         :reply_to_message_id => payload['message_id']
-    } if args != ''
+    } if args != '' & !mode
+    if mode
+      if mode
+        result = [
+            {
+                :type => 'article',
+                :id => rand(10000000).to_s,
+                :title => '#ECHOME',
+                :message_text => "*Bot* says trough inline: _#{args}_",
+                :parse_mode => 'Markdown'
+            }
+        ]
+        res = $fd.post "/bot#{ENV['TOKEN']}/answerInlineQuery", {
+            :inline_query_id => payload['id'],
+            :results => result.to_json,
+            :switch_pm_text => 'Go to PM'
+        }
+        puts res.body
+      end
+    end
   end
 end

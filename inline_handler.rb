@@ -11,6 +11,7 @@ class InlineHandler
     BeatmapDownload.perform_async(osu['id'], querydata['id'], -1, true) if osu != nil
     inline_regex = /^(?<cmd>[a-zA-Z_]+)(?<args>.*)/iu
     info = inline_regex.match(querytext)
+    return '' unless info
     payload = querydata
     args = info['args'].sub! ' ', ''
     case info['cmd']
@@ -24,10 +25,8 @@ class InlineHandler
         ChatsDumpCommand.perform_async(args, payload, true)
       when 'get_chat'
         GetChatCommand.perform_async(args, payload, true)
-      when 'broadcast'
-        BroadcastCommand.perform_async(args, payload, true)
-      when 'dice'
-        DiceCommand.perform_async(args, payload, true)
+      #when 'dice'
+      #  DiceCommand.perform_async(args, payload, true)
       when 'echo'
         EchoCommand.perform_async(args, payload, true)
     end
