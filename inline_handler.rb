@@ -7,7 +7,7 @@ class InlineHandler
   include SuckerPunch::Job
 
   def perform(querydata, querytext)
-    osu = /http(?:|s):\/\/osu.ppy.sh\/s\/(?<id>\d+)/i.match(querytext)
+    osu = /http(?:|s):\/\/osu.ppy.sh\/(s|d)\/(?<id>\d+)/i.match(querytext)
     BeatmapDownload.perform_async(osu['id'], querydata['id'], -1, true) if osu != nil
     inline_regex = /^(?<cmd>[a-zA-Z_]+)(?<args>.*)/iu
     info = inline_regex.match(querytext)
