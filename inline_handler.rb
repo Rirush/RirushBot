@@ -3,6 +3,7 @@ require './beatmap_download'
 require './commands'
 require 'sucker_punch'
 
+# Class for handling inline updates
 class InlineHandler
   include SuckerPunch::Job
 
