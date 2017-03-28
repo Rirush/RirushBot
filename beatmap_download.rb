@@ -26,7 +26,6 @@ class BeatmapDownload
     io = UploadIO.new(StringIO.new(beatmap.body), beatmap.headers[:content_type], "#{filename}.osz")
     $fd.post "/bot#{ENV['TOKEN']}/sendDocument", {
         :chat_id => userid,
-        :caption => "Your beatmap was succesfully downloaded! BeatmapID = #{beatmapid}",
         :reply_to_message_id => messageid,
         :document => io
     } unless mode
